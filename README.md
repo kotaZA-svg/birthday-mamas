@@ -1,2 +1,0 @@
-# birthday-mamas
-Birthday message
