@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy Birthday, Mamas ❤️</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Fira Code', monospace;
+      background: #0d1117;
+      color: #c9d1d9;
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    .gh-header {
+      background: #161b22;
+      border-bottom: 1px solid #30363d;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .gh-logo { fill: #f0f6fc; width: 32px; height: 32px; flex-shrink: 0; }
+
+    .gh-nav { display: flex; gap: 4px; font-size: 13px; flex-wrap: wrap; }
+    .gh-nav span { color: #8b949e; padding: 4px 10px; border-radius: 6px; }
+    .gh-nav .active { color: #f0f6fc; background: #1f6feb; }
+
+    /* ── REPO HEADER ── */
+    .repo-header {
+      padding: 24px 32px 0;
+      border-bottom: 1px solid #30363d;
+    }
+
+    .repo-title {
+      font-size: 20px;
+      color: #58a6ff;
+      margin-bottom: 14px;
+    }
+
+    .repo-title .slash { color: #8b949e; }
+
+    .repo-badge {
+      font-size: 11px;
+      padding: 2px 8px;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      color: #8b949e;
+      margin-left: 10px;
+      vertical-align: middle;
+    }
+
+    .repo-tabs { display: flex; gap: 0; font-size: 13px; }
+
+    .repo-tab {
+      padding: 10px 16px;
+      color: #8b949e;
+      border-bottom: 2px solid transparent;
+    }
+
+    .repo-tab.active { color: #f0f6fc; border-bottom-color: #f78166; }
+
+    /* ── LAYOUT ── */
+    .main-content {
+      padding: 24px 32px;
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: 24px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 700px) {
+      .main-content { grid-template-columns: 1fr; padding: 16px; }
+      .repo-header { padding: 16px 16px 0; }
+      .gh-header { padding: 12px 16px; }
+    }
+
+    /* ── FILE BOX ── */
+    .file-box {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .file-box-header {
+      background: #1c2128;
+      border-bottom: 1px solid #30363d;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      color: #8b949e;
+    }
+
+    .filename { color: #58a6ff; }
+
+    .code-area { padding: 16px; font-size: 13px; line-height: 1.9; }
+    .line { display: flex; gap: 16px; }
+    .ln { color: #3d444d; min-width: 22px; text-align: right; user-select: none; }
+    .kw  { color: #ff7b72; }
+    .str { color: #a5d6ff; }
+    .fn  { color: #d2a8ff; }
+    .cm  { color: #3d444d; }
+    .nm  { color: #ffa657; }
+    .bl  { color: #79c0ff; }
+
+    /* ── BUTTON ── */
+    .btn-click {
+      display: block;
+      margin: 20px auto 0;
+      background: linear-gradient(135deg, #238636, #2ea043);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 14px 36px;
+      font-family: 'Fira Code', monospace;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+      transition: transform 0.1s, box-shadow 0.2s;
+      box-shadow: 0 0 0 0 rgba(46,160,67,0);
+    }
+
+    .btn-click:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0 20px rgba(46,160,67,0.5);
+    }
+
+    .btn-click:active { transform: scale(0.97); }
+
+    /* ── MESSAGE CARD ── */
+    .message-card {
+      display: none;
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      margin-top: 20px;
+      overflow: hidden;
+      animation: fadeSlide 0.5s ease;
+    }
+
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(-12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .message-card.show { display: block; }
+
+    .msg-header {
+      background: #1c2128;
+      border-bottom: 1px solid #30363d;
+      padding: 10px 16px;
+      font-size: 13px;
+      color: #8b949e;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #2ea043;
+      box-shadow: 0 0 6px #2ea043;
+      flex-shrink: 0;
+    }
+
+    .msg-body {
+      padding: 24px 28px;
+      font-size: 14px;
+      line-height: 2.1;
+      color: #c9d1d9;
+    }
+
+    .msg-body .hl      { color: #ff7b72; }
+    .msg-body .verse   { color: #d2a8ff; font-style: italic; margin-top: 14px; }
+    .msg-body .closing { color: #ffa657; margin-top: 6px; }
+
+    /* ── SIDEBAR ── */
+    .sidebar-box {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 16px;
+      font-size: 13px;
+      margin-bottom: 16px;
+    }
+
+    .sidebar-box h3 {
+      font-size: 11px;
+      font-weight: 500;
+      color: #8b949e;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      margin: 3px 3px 3px 0;
+    }
+
+    .tag-pink  { background: rgba(248,81,73,.15);  color: #ff7b72; border: 1px solid rgba(248,81,73,.3); }
+    .tag-gold  { background: rgba(210,168,255,.12); color: #d2a8ff; border: 1px solid rgba(210,168,255,.3); }
+    .tag-blue  { background: rgba(88,166,255,.12);  color: #58a6ff; border: 1px solid rgba(88,166,255,.3); }
+    .tag-green { background: rgba(46,160,67,.15);   color: #3fb950; border: 1px solid rgba(46,160,67,.3); }
+
+    .commit-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid #21262d;
+      font-size: 12px;
+      color: #8b949e;
+    }
+
+    .commit-item:last-child { border-bottom: none; }
+
+    .commit-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      margin-top: 4px; flex-shrink: 0;
+    }
+
+    /* ── CONFETTI ── */
+    #confetti-wrap {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 999;
+    }
+
+    .confetti-piece {
+      position: absolute;
+      opacity: 0;
+      animation: fall 2.6s ease-in forwards;
+      border-radius: 2px;
+    }
+
+    @keyframes fall {
+      0%   { opacity: 1; transform: translateY(-20px) rotate(0deg); }
+      100% { opacity: 0; transform: translateY(110vh) rotate(720deg); }
+    }
+  </style>
+</head>
+<body>
+
+<div id="confetti-wrap"></div>
+
+<!-- HEADER -->
+<header class="gh-header">
+  <svg class="gh-logo" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38
+             0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13
+             -.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66
+             .07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15
+             -.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27
+             .68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12
+             .51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48
+             0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+  </svg>
+  <nav class="gh-nav" aria-label="GitHub navigation">
+    <span class="active">&lt;/&gt; Code</span>
+    <span>Issues</span>
+    <span>Pull requests</span>
+    <span>Actions</span>
+  </nav>
+</header>
+
+<!-- REPO HEADER -->
+<div class="repo-header">
+  <div class="repo-title">
+    <span class="slash">mamas /</span> birthday-message-for-you
+    <span class="repo-badge">Public</span>
+  </div>
+  <div class="repo-tabs">
+    <div class="repo-tab active">📁 Code</div>
+    <div class="repo-tab">⭐ Star</div>
+    <div class="repo-tab">🔱 Fork</div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<main class="main-content">
+  <div>
+    <!-- Code file -->
+    <div class="file-box">
+      <div class="file-box-header">
+        <span class="filename">birthday_message.js</span>
+        <span>latest commit · just now</span>
+      </div>
+      <div class="code-area" aria-label="Code snippet">
+        <div class="line"><span class="ln">1</span><span><span class="kw">const</span> <span class="nm">birthday</span> = {</span></div>
+        <div class="line"><span class="ln">2</span><span>&nbsp;&nbsp;<span class="fn">to</span>: <span class="str">"mamas"</span>,</span></div>
+        <div class="line"><span class="ln">3</span><span>&nbsp;&nbsp;<span class="fn">from</span>: <span class="str">"someone who cares"</span>,</span></div>
+        <div class="line"><span class="ln">4</span><span>&nbsp;&nbsp;<span class="fn">love</span>: <span class="bl">true</span>,</span></div>
+        <div class="line"><span class="ln">5</span><span>&nbsp;&nbsp;<span class="fn">hearts</span>: <span class="str">"❤️"</span>.repeat(<span class="nm">Infinity</span>),</span></div>
+        <div class="line"><span class="ln">6</span><span>};</span></div>
+        <div class="line"><span class="ln">7</span><span>&nbsp;</span></div>
+        <div class="line"><span class="ln">8</span><span><span class="cm">// Run this to reveal a special message 👇</span></span></div>
+        <div class="line"><span class="ln">9</span><span><span class="kw">function</span> <span class="fn">openMessage</span>() {</span></div>
+        <div class="line"><span class="ln">10</span><span>&nbsp;&nbsp;<span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Happy Birthday! ❤️"</span>);</span></div>
+        <div class="line"><span class="ln">11</span><span>}</span></div>
+      </div>
+    </div>
+
+    <!-- Button -->
+    <button class="btn-click" id="revealBtn" onclick="revealMessage()" aria-label="Reveal birthday message">
+      ▶ read · click me
+    </button>
+
+    <!-- Message -->
+    <div class="message-card" id="msgCard" role="region" aria-label="Birthday message">
+      <div class="msg-header">
+        <div class="dot"></div>
+        <span>output · birthday_message.js · just now</span>
+      </div>
+      <div class="msg-body">
+        <div>Happy birthday, mamas <span class="hl">❤️</span></div>
+        <br>
+        <div>Hope you have a lovely day, and remember what a loving and kind person you are.</div>
+        <br>
+        <div>I care about you a lot. I just want to say thank you for being there for me.</div>
+        <div>I appreciate you more than you know.</div>
+        <div>You make a difference in my life.</div>
+        <br>
+        <div>Thank you for all the laughs and happiness you have brought me.</div>
+        <div>I hope your day is filled with nothing but laughter and happiness <span class="hl">❤️🥳</span></div>
+        <br>
+        <div class="verse">"Solomon 4:7"</div>
+        <div class="closing">Happy birthday, my baby ❤️</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <aside>
+    <div class="sidebar-box">
+      <h3>About</h3>
+      <p style="color:#c9d1d9; margin-bottom:12px;">A message from the heart, committed with love 💛</p>
+      <div>
+        <span class="tag tag-pink">❤️ love</span>
+        <span class="tag tag-gold">🎂 birthday</span>
+        <span class="tag tag-blue">💛 friendship</span>
+        <span class="tag tag-green">🌸 kindness</span>
+      </div>
+    </div>
+
+    <div class="sidebar-box">
+      <h3>Commit history</h3>
+      <div class="commit-item">
+        <div class="commit-dot" style="background:#2ea043;"></div>
+        <span>add: unconditional love for mamas</span>
+      </div>
+      <div class="commit-item">
+        <div class="commit-dot" style="background:#58a6ff;"></div>
+        <span>feat: gratitude &amp; appreciation module</span>
+      </div>
+      <div class="commit-item">
+        <div class="commit-dot" style="background:#d2a8ff;"></div>
+        <span>init: years of laughs &amp; memories</span>
+      </div>
+      <div class="commit-item">
+        <div class="commit-dot" style="background:#ffa657;"></div>
+        <span>fix: never take her for granted</span>
+      </div>
+    </div>
+
+    <div class="sidebar-box">
+      <h3>Stats</h3>
+      <div style="color:#c9d1d9; line-height:2.2;">
+        <div>⭐ Stars &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#ffa657;">∞</span></div>
+        <div>❤️ Hearts &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#ff7b72;">∞</span></div>
+        <div>🥳 Celebrations <span style="color:#d2a8ff;">1</span> (today!)</div>
+      </div>
+    </div>
+  </aside>
+</main>
+
+<script>
+  function launchConfetti() {
+    const wrap = document.getElementById('confetti-wrap');
+    wrap.innerHTML = '';
+    const colors = ['#ff7b72','#d2a8ff','#ffa657','#3fb950','#58a6ff','#f8e3a1','#ff9f9f'];
+    for (let i = 0; i < 80; i++) {
+      const p = document.createElement('div');
+      p.className = 'confetti-piece';
+      const size = 6 + Math.random() * 9;
+      p.style.cssText = [
+        'left:' + (Math.random() * 100) + '%',
+        'top:-10px',
+        'width:' + size + 'px',
+        'height:' + size + 'px',
+        'background:' + colors[Math.floor(Math.random() * colors.length)],
+        'border-radius:' + (Math.random() > 0.5 ? '50%' : '2px'),
+        'animation-delay:' + (Math.random() * 1.4) + 's',
+        'animation-duration:' + (2 + Math.random() * 1.2) + 's'
+      ].join(';');
+      wrap.appendChild(p);
+    }
+    setTimeout(() => wrap.innerHTML = '', 5000);
+  }
+
+  function revealMessage() {
+    document.getElementById('msgCard').classList.add('show');
+    document.getElementById('revealBtn').style.display = 'none';
+    launchConfetti();
+  }
+</script>
+</body>
+</html>
